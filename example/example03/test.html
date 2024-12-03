@@ -1,0 +1,218 @@
+<html>
+<head>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.min.js" integrity="sha512-QJy1NRNGKQoHmgJ7v+45V2uDbf2me+xFoN9XewaSKkGwlqEHyqLVaLtVm93FzxVCKnYEZLFTI4s6v0oD0FbAlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.worker.min.js" integrity="sha512-UiXicZonl1pXJaZk0apG3TN/yE/a52JjAyZmr1MmvjI01f7MURJD+M4UUdBxxz1Zzte1zjie37VtotaR3b1/1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="utils/dialogFirmaModal.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script defer type="text/javascript" src="../lib/addComponent.js"></script>
+    <script defer type="text/javascript" src="https://apps.firmaperu.gob.pe/web/clienteweb/firmaperu.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <!--un simple spin-->
+    <link rel="stylesheet" href="utils/spinLib.css">
+    <script defer type="text/javascript" src="utils/spinLib.js"></script>
+
+    <script type="module">
+
+        import {FirmaPeru} from './../lib/firmaperu.js'
+        import {FirmaPosicion} from './../lib/firmaPosicion.js';
+        import {Signature} from './../lib/signature.js';
+        
+        //un simple spin
+        import {Spin} from './utils/spin.js'
+
+        var firmaPosicion=new FirmaPosicion(document.getElementById("rectangleFirma"))
+        let signature=new Signature();
+        
+        window.RUTA_PARENT=window.location.origin+"/example03"
+
+        window.cargarPrevioRutas=function(){
+
+            const hostname = window.location.hostname;
+            const protocol= window.location.protocol;
+            const port = "9091";
+            document.getElementById("url_refirma_invoker").value = `${protocol}//${hostname}:${port}`;
+
+            document.getElementById("pdf1").value=window.RUTA_PARENT+"/01.pdf";
+            document.getElementById("pdf2").value=window.RUTA_PARENT+"/02.pdf";
+           
+        }
+        window.cargarPDFTest=function(){
+
+            document.getElementById("frame1").src= document.getElementById("pdf1").value;
+            document.getElementById("frame2").src= document.getElementById("pdf2").value; 
+
+            document.getElementById("buttonEjecutar").style.display="";
+        }//////////////////////////////////////////////////////////////////////////////////////////////////
+        window.capturarPosicionXY=async function(){
+
+            var modal = document.getElementById("myModal");
+            modal.style.display = "flex";
+
+            var loadingTask = await pdfjsLib.getDocument(document.getElementById("pdf1").value);
+            var pdf=await loadingTask.promise;        
+            
+            var pageNumber = 1;
+
+            let stuff=await pdf.getData()
+            let pdfTexto = new TextDecoder("utf-8").decode(stuff);
+            let signatures=signature.signaturesByPage(pdfTexto,pageNumber);
+
+            var page= await pdf.getPage(pageNumber);
+                    
+            var scale = 0.75;
+            var viewport = page.getViewport({scale: scale});
+            
+            console.log(viewport.viewBox)//ancho y altura de la pagina
+
+            // Prepare canvas using PDF page dimensions
+            var canvasContentPDF = document.getElementById('canvasDocumentFirma');
+        
+            var context = canvasContentPDF.getContext('2d');
+            canvasContentPDF.height = viewport.height;
+            canvasContentPDF.width = viewport.width;
+
+            // Render PDF page into canvas context
+            var renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+
+            var renderTask = page.render(renderContext);
+            await renderTask.promise;
+            console.log('Page rendered into canvasDocumentFirma');
+
+            
+            firmaPosicion.sizeCanvas(canvasContentPDF.width,canvasContentPDF.height)
+            firmaPosicion.setSizeRectangleFirma(98,40);
+            firmaPosicion.setScale(scale);
+            firmaPosicion.dibujarSignatures(canvasContentPDF,signatures,"rgb(255, 0, 0,0.1)");//se debe de llamar antes de dibujarInicio()
+            firmaPosicion.dibujarInicio(10,10,"rgba(127, 191, 63, 0.5)");
+           
+
+    }//////////////////////////////////////////////////////////////////////////////////////////////////
+    window.cargarArgumento=async function (posx,posy){
+
+        try{
+            
+            Spin.load();
+
+            let pdfs=[];
+            
+            pdfs[0]={url:document.getElementById("pdf1").value,name:"doc1"};
+            pdfs[1]={url:document.getElementById("pdf2").value,name:"doc2"};
+            
+
+            let firmaParam={};
+            firmaParam.posx=Math.round(posx);
+            firmaParam.posy=Math.round(posy);
+            firmaParam.reason="Soy el autor de este super documento";
+            firmaParam.role="Programador Full Stack";
+            //Esta imagen debe ser descargable desde el servidor refirma
+            //firmaParam.stampSigned=window.RUTA_PARENT+"/kaminosoft.png"
+            
+            var url_server= document.getElementById("url_refirma_invoker").value;
+            //Direccion IP del Servidor Refirma
+            let firma=new FirmaPeru(url_server);
+            //El metodo autenticacion() solo debe ser usado para testeo
+            //nunca debe ser usado en el Cliente. 
+            let token=await firma.autenticacion("usuarioAccesoApi");
+            let url_base=await firma.ejecutar(pdfs,firmaParam,token);
+
+            alert("DOCUMENTOS FIRMADOS SATISFACTORIAMENTE")
+            
+            //Primera Opcion de Captura
+            document.getElementById("frame1").src=url_base+"/"+encodeURI("doc1")+"/"+encodeURI(token)//GET (PDF)
+            document.getElementById("frame2").src=url_base+"/"+encodeURI("doc2")+"/"+encodeURI(token)//GET (PDF)
+            
+            Spin.unload();
+
+        }catch(error){
+            
+            Spin.unload();
+            window.alert(error);
+            console.log(error);
+        }
+
+    }//////////////////////////////////////////////////////////////////////////////////////////////////
+    window.onclickCancel = function() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";    
+    }//////////////////////////////////////////////////////////////////////////////////////////////////
+    window.onclickFirmar = function() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+        
+        window.cargarArgumento(firmaPosicion.getX(),firmaPosicion.getY());
+        
+    }//////////////////////////////////////////////////////////////////////////////////////////////////
+   </script>
+
+</head>
+<body onload="cargarPrevioRutas()">
+    
+    <div>
+        <div class="item">
+            <label>REFIRMA INVOKER</label>
+            <input id="url_refirma_invoker" type="text" value="http://127.0.0.1:9091">
+        </div>
+        <div class="item">
+            <label> RUTA DOCUMENTO 1</label>
+            <input id="pdf1" type="text" value="">
+        </div>
+        <div class="item">
+            <label> RUTA DOCUMENTO 2</label>
+            <input id="pdf2" type="text" value="">
+        </div>
+        
+        <div class="item">
+            <button onclick="cargarPDFTest()">Cargar Documentos</button>
+            <button id="buttonEjecutar" onclick="capturarPosicionXY()" style="display: none">Firmar Documentos</button>
+        </div>
+        
+    </div>
+    <div class="contenedorPDF item">
+        <iframe id="frame1" src="" width="50%" height="500px" frameborder="1">
+        </iframe>
+
+        <iframe id="frame2" src="" width="50%" height="500px" frameborder="1">    
+        </iframe>
+    </div>
+    
+    <div class="item">
+        <b>Nota 1:</b> En caso ReFirma Invoker se ejecute  en un pc externa (diferente a 127.0.0.1),  verificar que los documentos a firmar son accesibles desde la pc externa.
+    </div>
+    <div class="item">
+        <b>Nota 2:</b> En este ejemplo, ReFirma Invoker esta invocando a ReFirma PCX el cual permite firmar multiples documentos.
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal-firma">
+
+        <!-- Modal content -->
+        <div class="modal-content-firma">
+
+            <div>
+                <div class="body-modal">
+                    <canvas id="canvasDocumentFirma">
+                    </canvas>
+                    <div>
+                        <canvas id="rectangleFirma">
+                        </canvas>
+                    </div>
+                </div>
+                <div class="fotter-modal">
+                    <button onclick="onclickCancel()">Cancelar</button>
+                    <button onclick="onclickFirmar()">Firmar</button>  
+                </div>
+                
+            </div>
+        
+        </div>
+       
+    </div>
+
+</body>
+</html>

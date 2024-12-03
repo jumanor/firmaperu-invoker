@@ -1,0 +1,141 @@
+<html>
+<head>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script defer type="text/javascript" src="../lib/addComponent.js"></script>
+    <script defer type="text/javascript" src="https://apps.firmaperu.gob.pe/web/clienteweb/firmaperu.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+
+    <script type="module">
+
+       import {FirmaPeru} from './../lib/firmaperu.js'
+        
+        window.RUTA_PARENT=window.location.origin+"/example01"
+
+        window.cargarPrevioRutas=function(){
+
+            const hostname = window.location.hostname;
+            const protocol= window.location.protocol;
+            const port = "9091";
+            document.getElementById("url_refirma_invoker").value = `${protocol}//${hostname}:${port}`;
+
+            document.getElementById("pdf1").value=window.RUTA_PARENT+"/01.pdf";
+            document.getElementById("pdf2").value=window.RUTA_PARENT+"/02.pdf";
+           
+        }
+        window.cargarPDFTest=function(){
+
+            document.getElementById("frame1").src= document.getElementById("pdf1").value;
+            document.getElementById("frame2").src= document.getElementById("pdf2").value; 
+
+            document.getElementById("buttonEjecutar").style.display="";
+        }
+        window.cargarArgumento=async function (){
+
+            try{
+                
+                let pdfs=[];
+                //pdfs[0]={url:"http://127.0.0.1:5500/01.pdf",name:"doc1"};
+                //pdfs[1]={url:"http://127.0.0.1:5500/02.pdf",name:"doc2"};
+                pdfs[0]={url:document.getElementById("pdf1").value,name:"doc1"};
+                pdfs[1]={url:document.getElementById("pdf2").value,name:"doc2"};
+                
+
+                let firmaParam={};
+                firmaParam.posx=10;
+                firmaParam.posy=12;
+                firmaParam.reason="Soy el autor de este super documento";
+                firmaParam.role="Programador Full Stack";
+                
+                var url_server= document.getElementById("url_refirma_invoker").value;
+                //Direccion IP del Servidor Refirma
+                let firma=new FirmaPeru(url_server);
+                //El metodo autenticacion() solo debe ser usado para testeo
+                //nunca debe ser usado en el Cliente. 
+                //
+                //El Sistema de Gestion Documental es el encargado de autenticar a los Usuarios
+                //y es este quien debe llamar al URI /autenticacion que esta implementado en el metodo autenticacion()
+                //El SGD enseguida envia el token al Cliente
+                let token=await firma.autenticacion("usuarioAccesoApi");
+                let url_base=await firma.ejecutar(pdfs,firmaParam,token);
+
+                alert("DOCUMENTOS FIRMADOS SATISFACTORIAMENTE")
+                
+                //Primera Opcion de Captura
+                document.getElementById("frame1").src=url_base+"/"+encodeURI("doc1")+"/"+encodeURI(token)//GET (PDF)
+                document.getElementById("frame2").src=url_base+"/"+encodeURI("doc2")+"/"+encodeURI(token)//GET (PDF)
+                
+                //Segunda Opcion de Captura
+                /*
+                var url=url_base+"/"+encodeURI("doc2")
+                let response=await fetch(url,{
+                    method:'POST',
+                    headers: {
+                                'x-access-token' : token    
+                            },
+                });
+                if(!response.ok){
+                    console.log(response.statusText)
+                    let tt=await response.text()
+                    throw Error(tt);
+                }
+
+                let result=await response.json();
+                document.getElementById("frame2").src="data:application/pdf;base64,"+result.data;//POST (PDF EN BASE64)
+                */
+
+            }catch(error){
+
+                window.alert(error);
+                console.log(error);
+            }
+
+    }//////////////////////////////////////////////////////////////////////////////////////////////////
+
+    </script>
+
+</head>
+<body onload="cargarPrevioRutas()">
+    
+    <div>
+        <div class="item">
+            <label>REFIRMA INVOKER</label>
+            <input id="url_refirma_invoker" type="text" value="http://127.0.0.1:9091">
+        </div>
+        <div class="item">
+            <label> RUTA DOCUMENTO 1</label>
+            <input id="pdf1" type="text" value="">
+        </div>
+        <div class="item">
+            <label> RUTA DOCUMENTO 2</label>
+            <input id="pdf2" type="text" value="">
+        </div>
+        
+        <div class="item">
+            <button onclick="cargarPDFTest()">Cargar Documentos</button>
+            <button id="buttonEjecutar" onclick="cargarArgumento()" style="display: none">Firmar Documentos</button>
+        </div>
+        
+    </div>
+    <div class="contenedorPDF item">
+        <iframe id="frame1" src="" width="50%" height="400px" frameborder="1">
+        </iframe>
+
+        <iframe id="frame2" src="" width="50%" height="400px" frameborder="1">    
+        </iframe>
+    </div>
+    
+    <div class="item">
+        <b>Nota 1:</b> En caso ReFirma Invoker se ejecute  en un pc externa (diferente a 127.0.0.1),  verificar que los documentos a firmar son accesibles desde la pc externa.
+    </div>
+    <div class="item">
+        <b>Nota 2:</b> En este ejemplo, ReFirma Invoker esta invocando a ReFirma PCX el cual permite firmar multiples documentos.
+    </div>
+    <!--
+        addComponet.js agrega este div, esto es necesario para que funcione refirma invoker
+        
+        <div id="addComponent"></div>
+    -->
+</body>
+</html>

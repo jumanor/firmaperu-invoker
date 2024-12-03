@@ -1,0 +1,20 @@
+# Identificador proporcionado por RENIEC
+clientId=miClientId
+# Identificador proporcionado por RENIEC
+clientSecret=miClientesecret
+# Direccion Ip y Puerto de escucha ReFirma Invoker
+serverAddress=0.0.0.0:9091
+# Clave secreta para generar Tokens
+secretKeyJwt=muysecretokenjwt
+# Usuario que accedera a la API
+userAccessApi=usuarioAccesoApi
+# Tiempo de expiración del Token en minutos (Opcional)
+timeExpireToken=5
+# Maximo tamaño del archivo 7z en bytes  (Opcional)
+maxFileSize7z=10485760
+# Certificado TLS (Opcional)
+#certificateFileTls=C:\Users\jumanor\cert.pem
+#certificateFileTls=/home/jumanor/cert.pem
+# Clave Privada TLS  (Opcional)
+#privateKeyFileTls=C:\Users\jumanor\key.pem
+#privateKeyFileTls=/home/jumanor/key.pem
