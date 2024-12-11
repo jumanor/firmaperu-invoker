@@ -22,6 +22,8 @@ Para mayor información de esta implementación puede ver en el siguiente [video
 Para ejecutar *Firma Perú Invoker Integration* es necesario que el Responsable de la Oficina de Tecnologias solicite
 las credenciales de acceso a la *Secretaria de Gobierno y Transformación Digital* de la *PCM*
 
+La solicitud la puedes realiza en https://www.gob.pe/22273 y busca la opción: *"Formato de solicitud de credenciales de Firma Perú - Firmador web"*
+
 Se le proporicionara un archivo **fwAuthorization.json** dentro del cual se encuentran las credenciales
 **[clientId]** y **[clientSecret]** para el uso de Firma Peru Invoker en el Sistema de Gestión Documental de su institución.   
 
@@ -80,11 +82,11 @@ Se compilo *Firma Perú Invoker Integration* para Windows y Linux, y estan dispo
 2. Copia la carpeta **public** del repositorio esta contiene 2 imagenes: iFirma.png e iLogo.png
 3. Crea un archivo **config.properties** con los siguientes parametros :
     ``` bash
-    # Identificador proporcionado por RENIEC
+    # Identificador proporcionado por SEGDI-PCM
     clientId=K57845459hkj
-    # Identificador proporcionado por RENIEC
+    # Identificador proporcionado por SEGDI-PCM
     clientSecret=TYUOPDLDFDG
-    # Direccion Ip y Puerto de escucha ReFirma Invoker Integration
+    # Direccion Ip y Puerto de escucha Firma Perú Invoker Integration
     serverAddress=0.0.0.0:9091
     # Clave secreta para generar Tokens
     secretKeyJwt=muysecretokenjwt
