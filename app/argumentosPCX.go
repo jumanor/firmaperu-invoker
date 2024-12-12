@@ -27,12 +27,13 @@ type Pdf []struct {
 
 // Definir la estructura para "firma"
 type Firma struct {
-	PosX        int    `json:"posx"`
-	PosY        int    `json:"posy"`
-	Reason      string `json:"reason"`
-	Role        string `json:"role"`
-	StampSigned string `json:"stampSigned"`
-	PageNumber  int    `json:"pageNumber"`
+	PosX            int    `json:"posx"`
+	PosY            int    `json:"posy"`
+	Reason          string `json:"reason"`
+	Role            string `json:"role"`
+	StampSigned     string `json:"stampSigned"`
+	PageNumber      int    `json:"pageNumber"`
+	VisiblePosition bool   `json:"visiblePosition"`
 }
 
 // Definir la estructura para "DatoArgumentos"
@@ -88,6 +89,7 @@ func ArgumentsServletPCX(w http.ResponseWriter, r *http.Request) {
 		"&reason=" + url.QueryEscape(inputParameter.Firma.Reason) +
 		"&role=" + url.QueryEscape(inputParameter.Firma.Role) +
 		"&imageToStamp=" + url.QueryEscape(inputParameter.Firma.StampSigned) +
+		"&visiblePosition=" + strconv.FormatBool(inputParameter.Firma.VisiblePosition) + //por defecto VisiblePosition=false
 		"&stampPage=" + strconv.Itoa(inputParameter.Firma.PageNumber) //por defecto PageNumber=0
 
 	objetoJSON := map[string]string{

@@ -44,6 +44,7 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 	role, _ := url.QueryUnescape(r.URL.Query().Get("role"))
 	imageToStamp, _ := url.QueryUnescape(r.URL.Query().Get("imageToStamp"))
 	stampPageQuery, _ := url.QueryUnescape(r.URL.Query().Get("stampPage"))
+	visiblePositionQuery, _ := url.QueryUnescape(r.URL.Query().Get("visiblePosition"))
 	//
 	if imageToStamp == "" {
 		imageToStamp = serverURL + "/public/iFirma.png"
@@ -59,6 +60,18 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	visiblePosition := false
+	if visiblePositionQuery != "false" {
+		var err error
+		visiblePosition, err = strconv.ParseBool(visiblePositionQuery)
+		if err != nil {
+			msn := "Error al convertir a bool variable visiblePosition"
+			logging.Log().Error().Err(err).Msg(msn)
+			http.Error(w, msn, http.StatusInternalServerError) //codigo http 500
+			return
+		}
+	}
+
 	//
 	documentToSign := serverURL + "/download7z?documentName=" + url.QueryEscape(documentNameUUID) + "&token=" + param_token
 	uploadDocumentSigned := serverURL + "/upload7z/" + url.QueryEscape(documentNameUUID) + "?token=" + param_token
@@ -72,7 +85,7 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	base64Str, err := convertir(stampPage, role, signatureReason, imageToStamp, documentToSign, uploadDocumentSigned, posx, posy, token_firma_peru)
+	base64Str, err := convertir(visiblePosition, stampPage, role, signatureReason, imageToStamp, documentToSign, uploadDocumentSigned, posx, posy, token_firma_peru)
 	if err != nil {
 		msn := "Error al convertir argumentos en base64"
 		logging.Log().Error().Err(err).Msg(msn)
@@ -189,7 +202,7 @@ func crearTokenFirmaPeru() (string, error) {
 
 }
 
-func convertir(stampPage int, role string, signatureReason string, imageToStamp string, documentToSign string,
+func convertir(visiblePosition bool, stampPage int, role string, signatureReason string, imageToStamp string, documentToSign string,
 	uploadDocumentSigned string, posx string, posy string, token string) (string, error) {
 
 	param := map[string]interface{}{
@@ -202,7 +215,7 @@ func convertir(stampPage int, role string, signatureReason string, imageToStamp 
 		"userTsa":                "",
 		"passwordTsa":            "",
 		"theme":                  "claro",
-		"visiblePosition":        false, //importante
+		"visiblePosition":        visiblePosition, //importante
 		"contactInfo":            "",
 		"signatureReason":        signatureReason,
 		"bachtOperation":         true,
@@ -216,7 +229,7 @@ func convertir(stampPage int, role string, signatureReason string, imageToStamp 
 		"positionx":              posx,
 		"positiony":              posy,
 		"uploadDocumentSigned":   uploadDocumentSigned,
-		"certificationSignature": false,
+		"certificationSignature": false, //unico firmante
 		"token":                  token,
 	}
 
