@@ -67,7 +67,7 @@
                 firmaParam.posx=parseInt(document.getElementById("posx").value);//10;
                 firmaParam.posy=parseInt(document.getElementById("posy").value);//12;
                 firmaParam.reason=document.getElementById("asunto").value;//"soy el autor de este super documento";
-                firmaParam.role="Programador Full Stack";
+                firmaParam.role=document.getElementById("cargo").value;
                 firmaParam.stampSigned=document.getElementById("stamp").src;
                 firmaParam.pageNumber = parseInt( document.getElementById("pageNumber").value,10); 
                 
@@ -183,13 +183,18 @@
                 <label>ASUNTO</label>
                 <input id="asunto" type="text" value="Soy el autor del Pdf">
             </div>
+
             <div class="item">
-                <label>ESTAMPILLA 01</label>
-                <input type="radio" name="imagen" class="radiobutton" value="1"  onclick="changeimage(this);">
+                <label>CARGO</label>
+                <input id="cargo" type="text" value="Jefe de Informacion">
             </div>
+
             <div class="item">
-                <label>ESTAMPILLA 02</label>
-                <input type="radio" name="imagen" class="radiobutton" value="2" checked onclick="changeimage(this);">
+                <label>ESTAMPILLA</label>
+                <select id="estampilla" name="estampilla" onclick="changeimage(this);">
+                    <option value="1">Estampilla 1</option>
+                    <option value="2" selected>Estampilla 2</option>
+                </select>
             </div>
             
         </div> 
