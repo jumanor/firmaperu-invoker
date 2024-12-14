@@ -70,7 +70,7 @@
                 firmaParam.role=document.getElementById("cargo").value;
                 firmaParam.stampSigned=document.getElementById("stamp").src;
                 firmaParam.pageNumber = parseInt( document.getElementById("pageNumber").value,10); 
-                
+                firmaParam.visiblePosition=document.getElementById('verposicionfirma').value === 'true';
                 
                 Spin.load();
                 //Direccion IP del Servidor Refirma
@@ -176,6 +176,13 @@
             <div class="item">
                 <label> DOCUMENTO 02</label>
                 <input id="pdf2" type="text" value="">
+            </div>
+            <div class="item">
+                <label>VER POS(X,Y) FIRMA</label>
+                <select id="verposicionfirma" name="verposicionfirma" >
+                    <option value="false">deshabilitado</option>
+                    <option value="true">habilitado</option>
+                </select>
             </div>
         </div>
         <div>
