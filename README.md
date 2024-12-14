@@ -33,7 +33,7 @@ Se le proporicionara un archivo **fwAuthorization.json** dentro del cual se encu
 
 1) Levantamos un contenedor de refirma-invoker
 ```
-docker run -d --name firmaperu-invoker -p 5050:5050 -p 9091:9091 -e CLIENT_ID=mi_client_id -e CLIENT_SECRET=mi_cliente_secret jumanor/firmaperu-invoker:1.0.0
+docker run -d --name firmaperu-invoker -p 5050:5050 -p 9091:9091 -e CLIENT_ID=mi_client_id -e CLIENT_SECRET=mi_cliente_secret jumanor/firmaperu-invoker:1.1.0
 ```
 2) Probamos el **example01** (el proceso de firma de los clientes solo esta disponible para Sistema Operativo Windows)
 ```
