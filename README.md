@@ -4,7 +4,7 @@ Implementación del Motor de Firma Digital - Firma Perú Invoker Integration - d
 
 ***Firma Perú Invoker*** es gratuito para las Entidades Públicas del Perú.
 
-La versión [v1.0.0](https://github.com/jumanor/firmaperu-invoker/tree/v1.0.0) es el último lanzamiento
+La versión [v1.1.0](https://github.com/jumanor/firmaperu-invoker/tree/v1.1.0) es el último lanzamiento
 
 Esta implementación es muy similar a **Refirma Invoker** por lo que los tutoriales de este puede servir aún de guía en **Firma Perú Invoker**
 
@@ -160,7 +160,7 @@ firmaParam.reason="Soy el autor del documento pdf";
 firmaParam.role="Programador Full Stack";
 firmaParam.stampSigned="http://miservidor.com/estampillafirma.png";//parametro opcional
 firmaParam.pageNumber=1; //parametro opcional, pagina donde se pondra la firma visible 
-
+firmaParam.visiblePosition=false;//parametro opcional, interfaz gráfica(posicion de firma) nativo de firma perú
 
 //Llamamos a Firma Perú Invoker Integration con la dirección ip en donde se ejecuta main.exe o main
 let firma=new FirmaPeru("http://192.168.1.10:9091");
