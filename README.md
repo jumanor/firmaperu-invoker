@@ -4,9 +4,11 @@ Implementación del Motor de Firma Digital - Firma Perú Invoker Integration - d
 
 ***Firma Perú Invoker*** es gratuito para las Entidades Públicas del Perú.
 
-La versión [v1.0.0](https://github.com/jumanor/firmaperu-invoker/tree/v1.0.0) es el último lanzamiento
+La versión [v1.1.0](https://github.com/jumanor/firmaperu-invoker/tree/v1.1.0) es el último lanzamiento
 
-Para mayor información de esta implementación puede ver en el siguiente [video](https://www.youtube.com/watch?v=aOto5CStZNA)
+Esta implementación es muy similar a **Refirma Invoker** por lo que los tutoriales de este puede servir aún de guía en **Firma Perú Invoker**
+
+Para mayor información de esta implementación puede ver los siguiente videos: [video 01](https://www.youtube.com/watch?v=bl4OZGWS0lk),[video 02](https://www.youtube.com/watch?v=aOto5CStZNA)
 
 # Características 
 - Soporte para firmar varios documentos 
@@ -22,7 +24,7 @@ Para mayor información de esta implementación puede ver en el siguiente [video
 Para ejecutar *Firma Perú Invoker Integration* es necesario que el Responsable de la Oficina de Tecnologias solicite
 las credenciales de acceso a la *Secretaria de Gobierno y Transformación Digital* de la *PCM*
 
-La solicitud la puedes realiza en https://www.gob.pe/22273 y busca la opción: *"Formato de solicitud de credenciales de Firma Perú - Firmador web"*
+La solicitud la puede realizar en https://www.gob.pe/22273 y busca la opción: *"Formato de solicitud de credenciales de Firma Perú - Firmador web"*
 
 Se le proporicionara un archivo **fwAuthorization.json** dentro del cual se encuentran las credenciales
 **[clientId]** y **[clientSecret]** para el uso de Firma Peru Invoker en el Sistema de Gestión Documental de su institución.   
@@ -121,15 +123,15 @@ Se compilo *Firma Perú Invoker Integration* para Windows y Linux, y estan dispo
         ./main
 
 # Instalación del Cliente
-Estan disponibles videos del funcionamiento (ejemplos) en los siguientes enlaces: [enlace1](https://www.youtube.com/watch?v=GPdfa7NeKZw).
+Estan disponibles videos del funcionamiento (ejemplos) en los siguientes enlaces: [enlace 01](https://www.youtube.com/watch?v=GPdfa7NeKZw).
 
-Refirma Invoker usa **Microsoft Click Once** para invocar a Refirma PCX.
+Firma Perú Invoker usa **Microsoft Click Once** para invocar a Firma Perú (Componente Web).
 
 1. Si esta usando navegador **Chome** o **Firefox** instala los siguientes plugins para habilitar **Microsoft Click Once**:
 
     - Chrome instale este [plugin](https://chromewebstore.google.com/detail/cegid-peoplenet-clickonce/jkncabbipkgbconhaajbapbhokpbgkdc) 
 
-    - Firefox instale este [plugin](https://addons.mozilla.org/es/firefox/addon/meta4clickoncelauncher/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search)  
+    - Firefox instale este [plugin](https://addons.mozilla.org/es/firefox/addon/breez-clickonce)  
     
 2. En caso use el navegador **Edge** no es necesario instalar nada adicional (Recomendable).
 
@@ -137,7 +139,7 @@ Refirma Invoker usa **Microsoft Click Once** para invocar a Refirma PCX.
 
     3.1. En caso use **Visual Studio Code** instale el plugin [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) que habilita un Servidor Web Embebido (Recomendable).
 
-4. Ingresa a cualquier ejemplo que desee probar ejecutando **http://a.b.c.d/example01/test.html**
+5. Ingresa a cualquier ejemplo que desee probar ejecutando **`http://direccion_ip:puerto/example01/test.html`**
 
 # Funcionamiento
 
@@ -158,7 +160,7 @@ firmaParam.reason="Soy el autor del documento pdf";
 firmaParam.role="Programador Full Stack";
 firmaParam.stampSigned="http://miservidor.com/estampillafirma.png";//parametro opcional
 firmaParam.pageNumber=1; //parametro opcional, pagina donde se pondra la firma visible 
-
+firmaParam.visiblePosition=false;//parametro opcional, interfaz gráfica(posicion de firma) nativo de firma perú
 
 //Llamamos a Firma Perú Invoker Integration con la dirección ip en donde se ejecuta main.exe o main
 let firma=new FirmaPeru("http://192.168.1.10:9091");
