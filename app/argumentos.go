@@ -45,6 +45,7 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 	imageToStamp, _ := url.QueryUnescape(r.URL.Query().Get("imageToStamp"))
 	stampPageQuery, _ := url.QueryUnescape(r.URL.Query().Get("stampPage"))
 	visiblePositionQuery, _ := url.QueryUnescape(r.URL.Query().Get("visiblePosition"))
+	signatureStyleQuery, _ := url.QueryUnescape(r.URL.Query().Get("signatureStyle"))
 	//
 	if imageToStamp == "" {
 		imageToStamp = serverURL + "/public/iFirma.png"
@@ -71,7 +72,17 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
+	signatureStyle := 1
+	if signatureStyleQuery != "0" {
+		var err error
+		signatureStyle, err = strconv.Atoi(signatureStyleQuery)
+		if err != nil {
+			msn := "Error al convertir a entero variable signatureStyle"
+			logging.Log().Error().Err(err).Msg(msn)
+			http.Error(w, msn, http.StatusInternalServerError) //codigo http 500
+			return
+		}
+	}
 	//
 	documentToSign := serverURL + "/download7z?documentName=" + url.QueryEscape(documentNameUUID) + "&token=" + param_token
 	uploadDocumentSigned := serverURL + "/upload7z/" + url.QueryEscape(documentNameUUID) + "?token=" + param_token
@@ -85,7 +96,7 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	base64Str, err := convertir(visiblePosition, stampPage, role, signatureReason, imageToStamp, documentToSign, uploadDocumentSigned, posx, posy, token_firma_peru)
+	base64Str, err := convertir(signatureStyle, visiblePosition, stampPage, role, signatureReason, imageToStamp, documentToSign, uploadDocumentSigned, posx, posy, token_firma_peru)
 	if err != nil {
 		msn := "Error al convertir argumentos en base64"
 		logging.Log().Error().Err(err).Msg(msn)
@@ -202,7 +213,8 @@ func crearTokenFirmaPeru() (string, error) {
 
 }
 
-func convertir(visiblePosition bool, stampPage int, role string, signatureReason string, imageToStamp string, documentToSign string,
+func convertir(signatureStyle int, visiblePosition bool, stampPage int, role string, signatureReason string,
+	imageToStamp string, documentToSign string,
 	uploadDocumentSigned string, posx string, posy string, token string) (string, error) {
 
 	param := map[string]interface{}{
@@ -220,7 +232,7 @@ func convertir(visiblePosition bool, stampPage int, role string, signatureReason
 		"signatureReason":        signatureReason,
 		"bachtOperation":         true,
 		"oneByOne":               false,
-		"signatureStyle":         1,
+		"signatureStyle":         signatureStyle, //default 1
 		"imageToStamp":           imageToStamp,
 		"stampTextSize":          14,
 		"stampWordWrap":          37,
