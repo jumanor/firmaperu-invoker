@@ -36,10 +36,27 @@ export class FirmaPosicion{
         this.CANVAS.addEventListener('mouseover', this.mouseover);
         
     }
-    //opcional
-    setSizeRectangleFirma(width,height){
-        this.WIDTH_RECTANGLE=width;
-        this.HEIGHT_RECTANGLE=height;
+    setSignatureStyle(style){
+
+        switch(style){
+        
+            case 1: //horizontal
+                this.WIDTH_RECTANGLE=98;
+                this.HEIGHT_RECTANGLE=40;
+                break;
+            case 2://vertical
+                this.WIDTH_RECTANGLE=75;
+                this.HEIGHT_RECTANGLE=76;
+                break;
+            case 3://solo estampado
+                this.WIDTH_RECTANGLE=30;
+                this.HEIGHT_RECTANGLE=30;
+                break;
+            case 4://solo descripcion
+                this.WIDTH_RECTANGLE=75;
+                this.HEIGHT_RECTANGLE=40;
+                break;
+        }
     }
     //opcional
     setScale(scale){
