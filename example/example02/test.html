@@ -1,6 +1,6 @@
 <html>
 <head>
-  
+    <meta charset="UTF-8">
     <!-- Bootstrap 4 dependency -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
@@ -71,7 +71,8 @@
                 firmaParam.stampSigned=document.getElementById("stamp").src;
                 firmaParam.pageNumber = parseInt( document.getElementById("pageNumber").value,10); 
                 firmaParam.visiblePosition=document.getElementById('verposicionfirma').value === 'true';
-                
+                firmaParam.signatureStyle=parseInt( document.getElementById("posEstampilla").value,10);;
+
                 Spin.load();
                 //Direccion IP del Servidor Refirma
                 let firma=new FirmaPeru(url_server_invoker);
@@ -201,6 +202,16 @@
                 <select id="estampilla" name="estampilla" onclick="changeimage(this);">
                     <option value="1">Estampilla 1</option>
                     <option value="2" selected>Estampilla 2</option>
+                </select>
+            </div>
+
+            <div class="item">
+                <label>POSICION</label>
+                <select id="posEstampilla" name="posEstampilla" >
+                    <option value="1">Horizontal</option>
+                    <option value="2">Vertical</option>
+                    <option value="3">Solo estampilla</option>
+                    <option value="4">Solo descripción</option>
                 </select>
             </div>
             

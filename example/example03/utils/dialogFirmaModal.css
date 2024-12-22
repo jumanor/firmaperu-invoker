@@ -28,6 +28,11 @@
     display: flex;
     justify-content: flex-end;
   }
+  .fotter-modal > select{
+    width: 170px;
+    margin-right: 5px;
+    margin-top: 5px;
+  }
   .fotter-modal > button{
     width: 70px;
     margin-right: 5px;

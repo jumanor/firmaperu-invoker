@@ -1,6 +1,7 @@
 <html>
 <head>
-
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.min.js" integrity="sha512-QJy1NRNGKQoHmgJ7v+45V2uDbf2me+xFoN9XewaSKkGwlqEHyqLVaLtVm93FzxVCKnYEZLFTI4s6v0oD0FbAlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.worker.min.js" integrity="sha512-UiXicZonl1pXJaZk0apG3TN/yE/a52JjAyZmr1MmvjI01f7MURJD+M4UUdBxxz1Zzte1zjie37VtotaR3b1/1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="utils/dialogFirmaModal.css">
@@ -84,9 +85,8 @@
             await renderTask.promise;
             console.log('Page rendered into canvasDocumentFirma');
 
-            
             firmaPosicion.sizeCanvas(canvasContentPDF.width,canvasContentPDF.height)
-            firmaPosicion.setSizeRectangleFirma(98,40);
+            firmaPosicion.setSignatureStyle(parseInt(document.getElementById("posEstampilla").value,10));
             firmaPosicion.setScale(scale);
             firmaPosicion.dibujarSignatures(canvasContentPDF,signatures,"rgb(255, 0, 0,0.1)");//se debe de llamar antes de dibujarInicio()
             firmaPosicion.dibujarInicio(10,10,"rgba(127, 191, 63, 0.5)");
@@ -110,8 +110,7 @@
             firmaParam.posy=Math.round(posy);
             firmaParam.reason="Soy el autor de este super documento";
             firmaParam.role="Programador Full Stack";
-            //Esta imagen debe ser descargable desde el servidor refirma
-            //firmaParam.stampSigned=window.RUTA_PARENT+"/kaminosoft.png"
+            firmaParam.signatureStyle=parseInt(document.getElementById("posEstampilla").value,10)
             
             var url_server= document.getElementById("url_refirma_invoker").value;
             //Direccion IP del Servidor Refirma
@@ -121,7 +120,7 @@
             let token=await firma.autenticacion("usuarioAccesoApi");
             let url_base=await firma.ejecutar(pdfs,firmaParam,token);
 
-            alert("DOCUMENTOS FIRMADOS SATISFACTORIAMENTE")
+            Swal.fire("","Los documentos han sido firmados correctamente","success");
             
             //Primera Opcion de Captura
             document.getElementById("frame1").src=url_base+"/"+encodeURI("doc1")+"/"+encodeURI(token)//GET (PDF)
@@ -147,6 +146,11 @@
         
         window.cargarArgumento(firmaPosicion.getX(),firmaPosicion.getY());
         
+    }//////////////////////////////////////////////////////////////////////////////////////////////////
+    window.changePosEstampilla=function(select){
+       
+        capturarPosicionXY();
+
     }//////////////////////////////////////////////////////////////////////////////////////////////////
    </script>
 
@@ -204,6 +208,12 @@
                     </div>
                 </div>
                 <div class="fotter-modal">
+                    <select id="posEstampilla" name="posEstampilla" onchange="changePosEstampilla(this);" >
+                        <option value="1">Horizontal</option>
+                        <option value="2">Vertical</option>
+                        <option value="3">Solo estampilla</option>
+                        <option value="4">Solo descripción</option>
+                    </select>
                     <button onclick="onclickCancel()">Cancelar</button>
                     <button onclick="onclickFirmar()">Firmar</button>  
                 </div>
