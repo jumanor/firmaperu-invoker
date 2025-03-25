@@ -35,6 +35,8 @@ type Firma struct {
 	PageNumber      int    `json:"pageNumber"`
 	VisiblePosition bool   `json:"visiblePosition"`
 	SignatureStyle  int    `json:"signatureStyle"`
+	StampTextSize   int    `json:"stampTextSize"`
+	StampWordWrap   int    `json:"stampWordWrap"`
 }
 
 // Definir la estructura para "DatoArgumentos"
@@ -91,8 +93,10 @@ func ArgumentsServletPCX(w http.ResponseWriter, r *http.Request) {
 		"&role=" + url.QueryEscape(inputParameter.Firma.Role) +
 		"&imageToStamp=" + url.QueryEscape(inputParameter.Firma.StampSigned) +
 		"&visiblePosition=" + strconv.FormatBool(inputParameter.Firma.VisiblePosition) + //por defecto VisiblePosition=false
-		"&signatureStyle=" + strconv.Itoa(inputParameter.Firma.SignatureStyle) + //por defecto SignatureStyle=0
-		"&stampPage=" + strconv.Itoa(inputParameter.Firma.PageNumber) //por defecto PageNumber=0
+        "&signatureStyle=" + strconv.Itoa(inputParameter.Firma.SignatureStyle) + //por defecto SignatureStyle=0
+        "&stampPage=" + strconv.Itoa(inputParameter.Firma.PageNumber)+ //por defecto PageNumber=0
+		"&stampTextSize=" + strconv.Itoa(inputParameter.Firma.StampTextSize) +
+		"&stampWordWrap=" + strconv.Itoa(inputParameter.Firma.StampWordWrap)
 
 	objetoJSON := map[string]string{
 		"param_url":          serverURL + "/argumentos?" + param_query,
