@@ -46,6 +46,8 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 	stampPageQuery, _ := url.QueryUnescape(r.URL.Query().Get("stampPage"))
 	visiblePositionQuery, _ := url.QueryUnescape(r.URL.Query().Get("visiblePosition"))
 	signatureStyleQuery, _ := url.QueryUnescape(r.URL.Query().Get("signatureStyle"))
+	stampTextSizeQuery := r.URL.Query().Get("stampTextSize")
+	stampWordWrapQuery := r.URL.Query().Get("stampWordWrap")
 	//
 	if imageToStamp == "" {
 		imageToStamp = serverURL + "/public/iFirma.png"
@@ -83,6 +85,31 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
+	stampTextSize := 14
+	if stampTextSizeQuery != "0" {
+		var err error
+		stampTextSize, err = strconv.Atoi(stampTextSizeQuery)
+		if err != nil {
+			msn := "Error al convertir a entero variable stampTextSize"
+			logging.Log().Error().Err(err).Msg(msn)
+			http.Error(w, msn, http.StatusInternalServerError)
+			return
+		}
+	}
+
+	stampWordWrap := 37
+	if stampWordWrapQuery != "0" {
+		var err error
+		stampWordWrap, err = strconv.Atoi(stampWordWrapQuery)
+		if err != nil {
+			msn := "Error al convertir a entero variable stampWordWrap"
+			logging.Log().Error().Err(err).Msg(msn)
+			http.Error(w, msn, http.StatusInternalServerError)
+			return
+		}
+	}
+
 	//
 	documentToSign := serverURL + "/download7z?documentName=" + url.QueryEscape(documentNameUUID) + "&token=" + param_token
 	uploadDocumentSigned := serverURL + "/upload7z/" + url.QueryEscape(documentNameUUID) + "?token=" + param_token
@@ -96,7 +123,7 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	base64Str, err := convertir(signatureStyle, visiblePosition, stampPage, role, signatureReason, imageToStamp, documentToSign, uploadDocumentSigned, posx, posy, token_firma_peru)
+	base64Str, err := convertir(signatureStyle, visiblePosition, stampPage, role, signatureReason, imageToStamp, documentToSign, uploadDocumentSigned, posx, posy, token_firma_peru, stampTextSize, stampWordWrap)
 	if err != nil {
 		msn := "Error al convertir argumentos en base64"
 		logging.Log().Error().Err(err).Msg(msn)
@@ -215,7 +242,7 @@ func crearTokenFirmaPeru() (string, error) {
 
 func convertir(signatureStyle int, visiblePosition bool, stampPage int, role string, signatureReason string,
 	imageToStamp string, documentToSign string,
-	uploadDocumentSigned string, posx string, posy string, token string) (string, error) {
+	uploadDocumentSigned string, posx string, posy string, token string, stampTextSize int, stampWordWrap int) (string, error) {
 
 	param := map[string]interface{}{
 		"signatureFormat":        "PAdES",
@@ -234,8 +261,8 @@ func convertir(signatureStyle int, visiblePosition bool, stampPage int, role str
 		"oneByOne":               false,
 		"signatureStyle":         signatureStyle, //default 1
 		"imageToStamp":           imageToStamp,
-		"stampTextSize":          14,
-		"stampWordWrap":          37,
+		"stampTextSize":          stampTextSize,
+		"stampWordWrap":          stampWordWrap,
 		"role":                   role,
 		"stampPage":              stampPage, //default 1
 		"positionx":              posx,
