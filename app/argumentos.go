@@ -87,7 +87,7 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 	}
 
 	stampTextSize := 14
-	if stampTextSizeQuery != "" {
+	if stampTextSizeQuery != "0" {
 		var err error
 		stampTextSize, err = strconv.Atoi(stampTextSizeQuery)
 		if err != nil {
@@ -99,7 +99,7 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 	}
 
 	stampWordWrap := 37
-	if stampWordWrapQuery != "" {
+	if stampWordWrapQuery != "0" {
 		var err error
 		stampWordWrap, err = strconv.Atoi(stampWordWrapQuery)
 		if err != nil {
