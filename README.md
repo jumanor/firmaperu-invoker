@@ -4,7 +4,7 @@ Implementación del Motor de Firma Digital - Firma Perú Invoker Integration - d
 
 ***Firma Perú Invoker*** es gratuito para las Entidades Públicas del Perú.
 
-La versión [v1.2.0](https://github.com/jumanor/firmaperu-invoker/tree/v1.2.0) es el último lanzamiento
+La versión [v1.3.0](https://github.com/jumanor/firmaperu-invoker/tree/v1.3.0) es el último lanzamiento
 
 Esta implementación es muy similar a **Refirma Invoker** por lo que los tutoriales de este puede servir aún de guía en **Firma Perú Invoker**
 
@@ -33,7 +33,7 @@ Se le proporicionara un archivo **fwAuthorization.json** dentro del cual se encu
 
 1) Levantamos un contenedor de refirma-invoker
 ```
-docker run -d --name firmaperu-invoker -p 5050:5050 -p 9091:9091 -e CLIENT_ID=mi_client_id -e CLIENT_SECRET=mi_cliente_secret jumanor/firmaperu-invoker:1.2.0
+docker run -d --name firmaperu-invoker -p 5050:5050 -p 9091:9091 -e CLIENT_ID=mi_client_id -e CLIENT_SECRET=mi_cliente_secret jumanor/firmaperu-invoker:1.3.0
 ```
 2) Probamos el **example01** (el proceso de firma de los clientes solo esta disponible para Sistema Operativo Windows)
 ```
@@ -96,8 +96,6 @@ Se compilo *Firma Perú Invoker Integration* para Windows y Linux, y estan dispo
     userAccessApi=usuarioAccesoApi
     # Tiempo de expiración del Token en minutos. Ejemplo 5 minutos (Opcional)
     timeExpireToken=5
-    # Maximo tamaño del archivo 7z en bytes. Ejemplo 10 megas (Opcional)
-    maxFileSize7z=10485760
     # Certificado SSL/TLS (Opcional)
     #certificateFileTls=C:\Users\jumanor\cert.pem
     #certificateFileTls=/home/jumanor/cert.pem
@@ -162,6 +160,8 @@ firmaParam.stampSigned="http://miservidor.com/estampillafirma.png";//parametro o
 firmaParam.pageNumber=1; //parametro opcional, pagina donde se pondra la firma visible 
 firmaParam.visiblePosition=false;//parametro opcional, interfaz gráfica(posicion de firma) nativo de firma perú
 firmaParam.signatureStyle=1;//parametro opcional, 1:horizontal 2:vertical 3:solo estampado 4:solo descripción
+firmaParam.stampTextSize=14;//parametro opcional,
+firmaParam.stampWordWrap=37;//parametro opcional,
 
 //Llamamos a Firma Perú Invoker Integration con la dirección ip en donde se ejecuta main.exe o main
 let firma=new FirmaPeru("http://192.168.1.10:9091");
