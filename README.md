@@ -18,6 +18,7 @@ Para mayor información de esta implementación puede ver los siguiente videos: 
 
 # Documentos de la Implementación
 - Documento de Integración Firma Peru http://bit.ly/49Ardlv
+- Guía para el uso e integración de la Plataforma Nacional de Firma Digital en la Administración Pública https://cutt.ly/urmqJxHM
 
 # Cómo solicitar identificadores? 
 
