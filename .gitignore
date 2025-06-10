@@ -5,3 +5,4 @@ config.properties
 main
 main.log
 token.txt
+version.txt

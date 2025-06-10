@@ -5,7 +5,9 @@ WORKDIR /opt
 COPY . .
 
 RUN go mod tidy
-RUN go build -o main main.go
+
+RUN chmod +x build.sh
+RUN ./build.sh linux
 
 # Usa la imagen base httpd:2.4
 FROM httpd:2.4
