@@ -2,9 +2,11 @@ package util
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -57,4 +59,9 @@ func ReadPropertiesFile(filename string) (AppConfigProperties, error) {
 	}
 
 	return config, nil
+}
+
+func CreateVersionFile(version, buildTime, gitCommit string) error {
+	content := fmt.Sprintf("Version: %s\nBuildTime: %s\nGitCommit: %s\n", version, buildTime, gitCommit)
+	return os.WriteFile(filepath.Join(".", "version.txt"), []byte(content), 0644)
 }

@@ -13,6 +13,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
+var (
+	Version   string = "unknown"
+	BuildTime string = "unknown"
+	GitCommit string = "unknown"
+)
+
 var SERVER_ADDRESS string
 var CERTIFICATE_FILE_TLS string
 var PRIVATE_KEY_FILE_TLS string
@@ -54,6 +60,8 @@ func init() {
 }
 
 func main() {
+	util.CreateVersionFile(Version, BuildTime, GitCommit)
+
 	enrutador := mux.NewRouter()
 
 	fs := http.FileServer(http.Dir("./public/"))
