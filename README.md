@@ -4,7 +4,7 @@ Implementación del Motor de Firma Digital - Firma Perú Invoker Integration - d
 
 ***Firma Perú Invoker*** es gratuito para las Entidades Públicas del Perú.
 
-La versión [v1.3.0](https://github.com/jumanor/firmaperu-invoker/tree/v1.3.0) es el último lanzamiento
+La versión [v1.4.0](https://github.com/jumanor/firmaperu-invoker/tree/v1.4.0) es el último lanzamiento
 
 Esta implementación es muy similar a **Refirma Invoker** por lo que los tutoriales de este puede servir aún de guía en **Firma Perú Invoker**
 
@@ -34,7 +34,7 @@ Se le proporicionara un archivo **fwAuthorization.json** dentro del cual se encu
 
 1) Levantamos un contenedor de refirma-invoker
 ```
-docker run -d --name firmaperu-invoker -p 5050:5050 -p 9091:9091 -e CLIENT_ID=mi_client_id -e CLIENT_SECRET=mi_cliente_secret jumanor/firmaperu-invoker:1.3.0
+docker run -d --name firmaperu-invoker -p 5050:5050 -p 9091:9091 -e CLIENT_ID=mi_client_id -e CLIENT_SECRET=mi_cliente_secret jumanor/firmaperu-invoker:v1.4.0
 ```
 2) Probamos el **example01** (el proceso de firma de los clientes solo esta disponible para Sistema Operativo Windows)
 ```
