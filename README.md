@@ -160,6 +160,7 @@ firmaParam.role="Programador Full Stack";
 firmaParam.stampSigned="http://miservidor.com/estampillafirma.png";//parametro opcional
 firmaParam.pageNumber=1; //parametro opcional, pagina donde se pondra la firma visible 
 firmaParam.visiblePosition=false;//parametro opcional, interfaz gráfica(posicion de firma) nativo de firma perú
+firmaParam.oneByOne=false;//parametro opcional,false: una sola vez ubica la posicion de la firma true: por cada documento ubica la posicion de la firma solo si visiblePosition=true
 firmaParam.signatureStyle=1;//parametro opcional, 1:horizontal 2:vertical 3:solo estampado 4:solo descripción
 firmaParam.stampTextSize=14;//parametro opcional,
 firmaParam.stampWordWrap=37;//parametro opcional,
