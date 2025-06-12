@@ -34,6 +34,7 @@ type Firma struct {
 	StampSigned     string `json:"stampSigned"`
 	PageNumber      int    `json:"pageNumber"`
 	VisiblePosition bool   `json:"visiblePosition"`
+	OneByOne        bool   `json:"oneByOne"`
 	SignatureStyle  int    `json:"signatureStyle"`
 	StampTextSize   int    `json:"stampTextSize"`
 	StampWordWrap   int    `json:"stampWordWrap"`
@@ -93,10 +94,13 @@ func ArgumentsServletPCX(w http.ResponseWriter, r *http.Request) {
 		"&role=" + url.QueryEscape(inputParameter.Firma.Role) +
 		"&imageToStamp=" + url.QueryEscape(inputParameter.Firma.StampSigned) +
 		"&visiblePosition=" + strconv.FormatBool(inputParameter.Firma.VisiblePosition) + //por defecto VisiblePosition=false
-        "&signatureStyle=" + strconv.Itoa(inputParameter.Firma.SignatureStyle) + //por defecto SignatureStyle=0
-        "&stampPage=" + strconv.Itoa(inputParameter.Firma.PageNumber)+ //por defecto PageNumber=0
+		"&oneByOne=" + strconv.FormatBool(inputParameter.Firma.OneByOne) + //por defecto OneByOne=false
+		"&signatureStyle=" + strconv.Itoa(inputParameter.Firma.SignatureStyle) + //por defecto SignatureStyle=0
+		"&stampPage=" + strconv.Itoa(inputParameter.Firma.PageNumber) + //por defecto PageNumber=0
 		"&stampTextSize=" + strconv.Itoa(inputParameter.Firma.StampTextSize) +
 		"&stampWordWrap=" + strconv.Itoa(inputParameter.Firma.StampWordWrap)
+
+	logging.Log().Debug().Str("param_query", param_query).Msg("Parametros de Consulta")
 
 	objetoJSON := map[string]string{
 		"param_url":          serverURL + "/argumentos?" + param_query,
