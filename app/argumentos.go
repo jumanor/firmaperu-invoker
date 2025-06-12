@@ -225,7 +225,7 @@ func crearTokenFirmaPeru() (string, error) {
 	req, err := http.NewRequest("POST", apiURL, bytes.NewBufferString(formData.Encode()))
 	if err != nil {
 
-		logging.Log().Error().Err(err).Msg("Error al crear la solicitud")
+		logging.Log().Error().Err(err).Msg("Error al crear la solicitud " + apiURL)
 		return "", err
 	}
 
@@ -235,7 +235,7 @@ func crearTokenFirmaPeru() (string, error) {
 	resp, err := client.Do(req)
 	if err != nil {
 
-		logging.Log().Error().Err(err).Msg("Error al enviar la solicitud")
+		logging.Log().Error().Err(err).Msg("Error al enviar la solicitud" + apiURL)
 		return "", err
 	}
 	defer resp.Body.Close()
@@ -243,7 +243,7 @@ func crearTokenFirmaPeru() (string, error) {
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 
-		logging.Log().Error().Err(err).Msg("Error al leer la respuesta")
+		logging.Log().Error().Err(err).Msg("Error al leer la respuesta" + apiURL)
 		return "", err
 	}
 
