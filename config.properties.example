@@ -18,3 +18,12 @@ maxFileSize7z=10485760
 # Clave Privada TLS  (Opcional)
 #privateKeyFileTls=C:\Users\jumanor\key.pem
 #privateKeyFileTls=/home/jumanor/key.pem
+
+# Solo para configurar la rotacion del log (opcional)
+# Ver https://github.com/natefinch/lumberjack/tree/v2.2.1
+# Tamaño máximo en MB antes de rotar
+#maxSize=10
+# Número máximo de archivos de backup
+#maxBackups=0
+# Máximo de días a mantener los logs
+#maxAge=0

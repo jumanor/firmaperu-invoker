@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"firmaperuweb/app"
+	"firmaperuweb/config"
 	"firmaperuweb/logging"
 	"firmaperuweb/util"
 
@@ -30,7 +31,7 @@ func init() {
 	abs_fname, _ := filepath.Abs("./")
 	ruta := abs_fname + string(filepath.Separator) + "config.properties"
 
-	properties, err := util.ReadPropertiesFile(ruta)
+	properties, err := config.ReadPropertiesFile(ruta)
 	if err != nil {
 		panic(err)
 	}

@@ -8,6 +8,8 @@ require (
 	github.com/rs/zerolog v1.28.0
 )
 
+require gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
+
 require (
 	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/mattn/go-colorable v0.1.12 // indirect
