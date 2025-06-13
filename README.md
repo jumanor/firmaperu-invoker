@@ -4,6 +4,8 @@ Implementación del Motor de Firma Digital - Firma Perú Invoker Integration - d
 
 ***Firma Perú Invoker*** es gratuito para las Entidades Públicas del Perú.
 
+Firma Perú Invoker se usa unicamente con certificado digital de persona juridica que se entregan a trabajadores del sector público, certificado digital de person natural con DNIe o certificado digital emitido por una entidad privada para personas.
+
 La versión [v1.4.0](https://github.com/jumanor/firmaperu-invoker/tree/v1.4.0) es el último lanzamiento
 
 Esta implementación es muy similar a **Refirma Invoker** por lo que los tutoriales de este puede servir aún de guía en **Firma Perú Invoker**
@@ -111,7 +113,16 @@ Se compilo *Firma Perú Invoker Integration* para Windows y Linux, y estan dispo
     # Clave Privada SSL/TLS (Opcional)
     privateKeyFileTls=/etc/letsencrypt/live/midominio.com/privkey.pem
     ```
-5. Ejecuta *ReFirma Invoker Integration*
+5. Si necesitas controlar la rotación del log utiliza los siquientes parametros:
+    ``` bash
+    # Tamaño máximo en MB antes de rotar (Opcional)
+    maxSize=10
+    # Número máximo de archivos de backup (Opcional)
+    maxBackups=3
+    # Máximo de días a mantener los logs (Opcional)
+    maxAge=3
+    ```
+6. Ejecuta *ReFirma Invoker Integration*
 
     Windows
 
