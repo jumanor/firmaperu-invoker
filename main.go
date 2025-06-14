@@ -25,8 +25,9 @@ var CERTIFICATE_FILE_TLS string
 var PRIVATE_KEY_FILE_TLS string
 
 func init() {
-
-	util.TIME_EXPIRE_TOKEN = 5
+	//valores por defecto config.properties
+	app.MAX_FILE_SIZE_7Z = 10485760 // 10 MB
+	util.TIME_EXPIRE_TOKEN = 5      // 5 minutos
 
 	abs_fname, _ := filepath.Abs("./")
 	ruta := abs_fname + string(filepath.Separator) + "config.properties"
@@ -49,9 +50,13 @@ func init() {
 			util.TIME_EXPIRE_TOKEN = exp
 		}
 	}
-	//if properties["maxFileSize7z"] != "" {
-	//	app.MAX_FILE_SIZE_7Z = properties["maxFileSize7z"]
-	//}
+	if properties["maxFileSize7z"] != "" {
+		if exp, err := strconv.ParseInt(properties["maxFileSize7z"], 10, 64); err != nil {
+			panic(err)
+		} else {
+			app.MAX_FILE_SIZE_7Z = exp
+		}
+	}
 	if properties["certificateFileTls"] != "" {
 		CERTIFICATE_FILE_TLS = properties["certificateFileTls"]
 	}

@@ -20,6 +20,8 @@ import (
 	"github.com/google/uuid"
 )
 
+var MAX_FILE_SIZE_7Z int64
+
 type Pdf []struct {
 	URL  string `json:"url"`
 	Name string `json:"name"`
@@ -242,6 +244,16 @@ func createFile7z(urls Pdf) (string, error) {
 		return "", errors.New("no se pudo comprimir a 7z")
 	}
 
-	logging.Log().Debug().Str("7z", file7z).Msg("Archivo 7z creado satisfactoriamente")
+	//determinar el tamao del archivo 7z
+	fileInfo, err := os.Stat(file7z)
+	if err != nil {
+		return "", err
+	}
+	if fileInfo.Size() > MAX_FILE_SIZE_7Z {
+		return "", fmt.Errorf("el archivo 7z de %d bytes excede el tamaño máximo permitido de %d bytes",
+			fileInfo.Size(), MAX_FILE_SIZE_7Z)
+	}
+
+	logging.Log().Debug().Str("7z", file7z).Msgf("Archivo 7z (%d bytes) creado satisfactoriamente", fileInfo.Size())
 	return nameUUID, nil
 }
