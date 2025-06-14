@@ -87,7 +87,7 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	signatureStyle := 1
-	if signatureStyleQuery != "0" {
+	if signatureStyleQuery != "-1" {
 		var err error
 		signatureStyle, err = strconv.Atoi(signatureStyleQuery)
 		if err != nil {

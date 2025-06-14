@@ -57,6 +57,8 @@ func ArgumentsServletPCX(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var inputParameter DatoArgumentos
+	inputParameter.Firma.SignatureStyle = -1 //por defecto SignatureStyle=-1
+
 	err := json.NewDecoder(r.Body).Decode(&inputParameter)
 	if err != nil {
 		logging.Log().Error().Err(err).Send()
@@ -95,7 +97,7 @@ func ArgumentsServletPCX(w http.ResponseWriter, r *http.Request) {
 		"&imageToStamp=" + url.QueryEscape(inputParameter.Firma.StampSigned) +
 		"&visiblePosition=" + strconv.FormatBool(inputParameter.Firma.VisiblePosition) + //por defecto VisiblePosition=false
 		"&oneByOne=" + strconv.FormatBool(inputParameter.Firma.OneByOne) + //por defecto OneByOne=false
-		"&signatureStyle=" + strconv.Itoa(inputParameter.Firma.SignatureStyle) + //por defecto SignatureStyle=0
+		"&signatureStyle=" + strconv.Itoa(inputParameter.Firma.SignatureStyle) +
 		"&stampPage=" + strconv.Itoa(inputParameter.Firma.PageNumber) + //por defecto PageNumber=0
 		"&stampTextSize=" + strconv.Itoa(inputParameter.Firma.StampTextSize) +
 		"&stampWordWrap=" + strconv.Itoa(inputParameter.Firma.StampWordWrap)
