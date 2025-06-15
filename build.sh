@@ -3,7 +3,7 @@
 # Obtener información del repo
 VERSION=$(git describe --tags 2>/dev/null || echo "dev")
 BUILD_TIME=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
-GIT_COMMIT=$(git rev-parse --short HEAD)
+GIT_COMMIT="$(git rev-parse --abbrev-ref HEAD)-$(git rev-parse HEAD)"
 
 # Función para construir en Linux
 build_linux() {

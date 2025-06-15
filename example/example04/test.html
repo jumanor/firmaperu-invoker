@@ -1,0 +1,192 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script defer type="text/javascript" src="../lib/addComponent.js"></script>
+    <script defer type="text/javascript" src="https://apps.firmaperu.gob.pe/web/clienteweb/firmaperu.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <!--un simple spin-->
+    <link rel="stylesheet" href="utils/spinLib.css">
+    <script defer type="text/javascript" src="utils/spinLib.js"></script>
+
+    <script type="module">
+
+        import {FirmaPeru} from './../lib/firmaperu.js'
+        
+        //un simple spin
+        import {Spin} from './utils/spin.js'
+
+        
+        window.RUTA_DOCUMENTOS=window.location.origin+"/example04"
+
+        window.cargarPrevioRutas=function(){
+
+            const hostname = window.location.hostname;
+            const protocol= window.location.protocol;
+            const port = "9091";
+            document.getElementById("url_refirma_invoker").value = `${protocol}//${hostname}:${port}`;
+
+            document.getElementById("ruta").value=window.RUTA_DOCUMENTOS+"/certificados/";
+			
+           
+        }
+        window.cargarPDFTest=function(){
+			
+			
+            document.getElementById("buttonEjecutar").style.display="";
+			
+			
+			window.numPdfs=parseInt(document.getElementById("numDocumentos").value)
+			window.crearCombo(window.numPdfs);
+			
+			document.getElementById("miCombo").selectedIndex=0
+            document.getElementById("frame_preview").src= document.getElementById("ruta").value+"1.pdf";
+			
+			document.getElementById("contenedorComboDocumentos").style.display="flex"
+			
+            
+        }//////////////////////////////////////////////////////////////////////////////////////////////////
+        
+    window.cargarArgumento=async function (posx,posy){
+
+        try{
+            
+            Spin.load();
+
+            let pdfs=[];
+            
+			for(let i=0;i<window.numPdfs;i++){
+			
+				pdfs[i]={url: document.getElementById("ruta").value+""+(i+1)+".pdf",name:"doc"+(i+1)}
+            
+			}
+
+
+            let firmaParam={};
+            firmaParam.posx=Math.round(posx);
+            firmaParam.posy=Math.round(posy);
+            firmaParam.reason="Soy el autor de este super documento";
+            firmaParam.role="Programador Full Stack";
+            firmaParam.signatureStyle=1;
+			firmaParam.visiblePosition=true;
+			//firmaParam.oneByOne=true
+            
+            var url_server= document.getElementById("url_refirma_invoker").value;
+            //Direccion IP del Servidor Refirma
+            let firma=new FirmaPeru(url_server);
+            //El metodo autenticacion() solo debe ser usado para testeo
+            //nunca debe ser usado en el Cliente. 
+            let token=await firma.autenticacion("usuarioAccesoApi");
+            let url_base=await firma.ejecutar(pdfs,firmaParam,token);
+			window.URL_BASE=url_base;
+			window.TOKEN=token;
+
+            Swal.fire("","Los documentos han sido firmados correctamente","success");
+			
+			
+			document.getElementById("contenedorButtons").style.display="none";
+			
+			
+			document.getElementById("miCombo").selectedIndex=0;
+			document.getElementById("frame_preview").src=window.URL_BASE+"/"+encodeURI("doc1")+"/"+encodeURI(window.TOKEN)
+                        
+            Spin.unload();
+
+        }catch(error){
+            
+            Spin.unload();
+            window.alert(error);
+            console.log(error);
+        }
+
+    }//////////////////////////////////////////////////////////////////////////////////////////////////
+    window.onclickFirmar = function() {
+        
+        
+		window.cargarArgumento(10,10);
+		
+        
+    }//////////////////////////////////////////////////////////////////////////////////////////////////
+	window.crearCombo=function(n) {
+	
+		// Crear el elemento select
+		const select = document.createElement('select');
+		select.id = 'miCombo';
+		select.name = 'miCombo';
+		
+		select.addEventListener('change', function() {
+			changeDocumento(this);
+		});
+
+		// Generar n opciones dinámicamente
+		for (let i = 1; i <= n; i++) {
+			const option = document.createElement('option');
+			option.value = i;
+			option.textContent = `Documento ${i}`;
+			select.appendChild(option);
+		}
+
+		// Obtener el contenedor y agregar el select
+		const contenedor = document.getElementById('contenedorCombo');
+		contenedor.appendChild(select);
+	}//////////////////////////////////////////////////////////////////////////////////////////////////
+	window.changeDocumento=function(radio){
+       const dsp=document.getElementById("contenedorButtons").style.display;
+		
+	    let valor=radio.value
+		if(dsp=="none"){//firmados
+			document.getElementById("frame_preview").src=window.URL_BASE+"/"+encodeURI("doc"+valor)+"/"+encodeURI(window.TOKEN)
+		}
+		else{
+			document.getElementById("frame_preview").src=document.getElementById("ruta").value+(valor)+".pdf"
+		}
+		
+		
+    }//////////////////////////////////////////////////////////////////////////////////////////////////
+		
+   </script>
+
+</head>
+<body onload="cargarPrevioRutas()">
+    
+    <div>
+		<div style="display:flex">
+			<div>
+					<div class="item">
+						<label>FIRMA PERU INVOKER</label>
+						<input id="url_refirma_invoker" type="text" value="http://127.0.0.1:9091">
+					</div>
+					<div class="item">
+						<label> RUTA DOCUMENTOS</label>
+						<input id="ruta" type="text" value="">
+					</div>
+			</div>
+			<div>
+					<div class="item">
+						<label> N° DOCUMENTOS</label>
+						<input id="numDocumentos" type="text" value="10">
+					</div>
+					<div class="item" id="contenedorComboDocumentos" style="display:none" >
+						<label> DOCUMENTO FIRMADO</label>
+						<div id="contenedorCombo"></div>
+					</div>
+					
+			</div>
+		</div>		
+        
+        <div class="item" id="contenedorButtons">
+            <button onclick="cargarPDFTest()">Cargar Documentos</button>
+            <button id="buttonEjecutar" onclick="onclickFirmar()" style="display: none">Firmar Documentos</button>
+        </div>
+        
+    </div>
+	<div class="contenedorPDF item">
+        <iframe id="frame_preview" src="" width="100%" height="500px" frameborder="1">
+        </iframe>
+    </div>
+   
+</body>
+</html>

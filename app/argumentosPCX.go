@@ -20,6 +20,8 @@ import (
 	"github.com/google/uuid"
 )
 
+var MAX_FILE_SIZE_7Z int64
+
 type Pdf []struct {
 	URL  string `json:"url"`
 	Name string `json:"name"`
@@ -34,6 +36,7 @@ type Firma struct {
 	StampSigned     string `json:"stampSigned"`
 	PageNumber      int    `json:"pageNumber"`
 	VisiblePosition bool   `json:"visiblePosition"`
+	OneByOne        bool   `json:"oneByOne"`
 	SignatureStyle  int    `json:"signatureStyle"`
 	StampTextSize   int    `json:"stampTextSize"`
 	StampWordWrap   int    `json:"stampWordWrap"`
@@ -56,6 +59,8 @@ func ArgumentsServletPCX(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var inputParameter DatoArgumentos
+	inputParameter.Firma.SignatureStyle = -1 //por defecto SignatureStyle=-1
+
 	err := json.NewDecoder(r.Body).Decode(&inputParameter)
 	if err != nil {
 		logging.Log().Error().Err(err).Send()
@@ -93,10 +98,13 @@ func ArgumentsServletPCX(w http.ResponseWriter, r *http.Request) {
 		"&role=" + url.QueryEscape(inputParameter.Firma.Role) +
 		"&imageToStamp=" + url.QueryEscape(inputParameter.Firma.StampSigned) +
 		"&visiblePosition=" + strconv.FormatBool(inputParameter.Firma.VisiblePosition) + //por defecto VisiblePosition=false
-        "&signatureStyle=" + strconv.Itoa(inputParameter.Firma.SignatureStyle) + //por defecto SignatureStyle=0
-        "&stampPage=" + strconv.Itoa(inputParameter.Firma.PageNumber)+ //por defecto PageNumber=0
+		"&oneByOne=" + strconv.FormatBool(inputParameter.Firma.OneByOne) + //por defecto OneByOne=false
+		"&signatureStyle=" + strconv.Itoa(inputParameter.Firma.SignatureStyle) +
+		"&stampPage=" + strconv.Itoa(inputParameter.Firma.PageNumber) + //por defecto PageNumber=0
 		"&stampTextSize=" + strconv.Itoa(inputParameter.Firma.StampTextSize) +
 		"&stampWordWrap=" + strconv.Itoa(inputParameter.Firma.StampWordWrap)
+
+	logging.Log().Debug().Str("param_query", param_query).Msg("Parametros de Consulta")
 
 	objetoJSON := map[string]string{
 		"param_url":          serverURL + "/argumentos?" + param_query,
@@ -236,6 +244,16 @@ func createFile7z(urls Pdf) (string, error) {
 		return "", errors.New("no se pudo comprimir a 7z")
 	}
 
-	logging.Log().Debug().Str("7z", file7z).Msg("Archivo 7z creado satisfactoriamente")
+	//determinar el tamao del archivo 7z
+	fileInfo, err := os.Stat(file7z)
+	if err != nil {
+		return "", err
+	}
+	if fileInfo.Size() > MAX_FILE_SIZE_7Z {
+		return "", fmt.Errorf("el archivo 7z de %d bytes excede el tamaño máximo permitido de %d bytes",
+			fileInfo.Size(), MAX_FILE_SIZE_7Z)
+	}
+
+	logging.Log().Debug().Str("7z", file7z).Msgf("Archivo 7z (%d bytes) creado satisfactoriamente", fileInfo.Size())
 	return nameUUID, nil
 }

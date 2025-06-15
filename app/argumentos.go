@@ -45,6 +45,7 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 	imageToStamp, _ := url.QueryUnescape(r.URL.Query().Get("imageToStamp"))
 	stampPageQuery, _ := url.QueryUnescape(r.URL.Query().Get("stampPage"))
 	visiblePositionQuery, _ := url.QueryUnescape(r.URL.Query().Get("visiblePosition"))
+	oneByOneQuery, _ := url.QueryUnescape(r.URL.Query().Get("oneByOne"))
 	signatureStyleQuery, _ := url.QueryUnescape(r.URL.Query().Get("signatureStyle"))
 	stampTextSizeQuery := r.URL.Query().Get("stampTextSize")
 	stampWordWrapQuery := r.URL.Query().Get("stampWordWrap")
@@ -74,8 +75,19 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	oneByOne := false
+	if oneByOneQuery != "false" {
+		var err error
+		oneByOne, err = strconv.ParseBool(oneByOneQuery)
+		if err != nil {
+			msn := "Error al convertir a bool variable oneByOne"
+			logging.Log().Error().Err(err).Msg(msn)
+			http.Error(w, msn, http.StatusInternalServerError) //codigo http 500
+			return
+		}
+	}
 	signatureStyle := 1
-	if signatureStyleQuery != "0" {
+	if signatureStyleQuery != "-1" {
 		var err error
 		signatureStyle, err = strconv.Atoi(signatureStyleQuery)
 		if err != nil {
@@ -123,7 +135,7 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	base64Str, err := convertir(signatureStyle, visiblePosition, stampPage, role, signatureReason, imageToStamp, documentToSign, uploadDocumentSigned, posx, posy, token_firma_peru, stampTextSize, stampWordWrap)
+	base64Str, err := convertir(signatureStyle, visiblePosition, oneByOne, stampPage, role, signatureReason, imageToStamp, documentToSign, uploadDocumentSigned, posx, posy, token_firma_peru, stampTextSize, stampWordWrap)
 	if err != nil {
 		msn := "Error al convertir argumentos en base64"
 		logging.Log().Error().Err(err).Msg(msn)
@@ -213,7 +225,7 @@ func crearTokenFirmaPeru() (string, error) {
 	req, err := http.NewRequest("POST", apiURL, bytes.NewBufferString(formData.Encode()))
 	if err != nil {
 
-		logging.Log().Error().Err(err).Msg("Error al crear la solicitud")
+		logging.Log().Error().Err(err).Msg("Error al crear la solicitud " + apiURL)
 		return "", err
 	}
 
@@ -223,7 +235,7 @@ func crearTokenFirmaPeru() (string, error) {
 	resp, err := client.Do(req)
 	if err != nil {
 
-		logging.Log().Error().Err(err).Msg("Error al enviar la solicitud")
+		logging.Log().Error().Err(err).Msg("Error al enviar la solicitud" + apiURL)
 		return "", err
 	}
 	defer resp.Body.Close()
@@ -231,7 +243,7 @@ func crearTokenFirmaPeru() (string, error) {
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 
-		logging.Log().Error().Err(err).Msg("Error al leer la respuesta")
+		logging.Log().Error().Err(err).Msg("Error al leer la respuesta" + apiURL)
 		return "", err
 	}
 
@@ -240,7 +252,7 @@ func crearTokenFirmaPeru() (string, error) {
 
 }
 
-func convertir(signatureStyle int, visiblePosition bool, stampPage int, role string, signatureReason string,
+func convertir(signatureStyle int, visiblePosition bool, oneByOne bool, stampPage int, role string, signatureReason string,
 	imageToStamp string, documentToSign string,
 	uploadDocumentSigned string, posx string, posy string, token string, stampTextSize int, stampWordWrap int) (string, error) {
 
@@ -258,7 +270,7 @@ func convertir(signatureStyle int, visiblePosition bool, stampPage int, role str
 		"contactInfo":            "",
 		"signatureReason":        signatureReason,
 		"bachtOperation":         true,
-		"oneByOne":               false,
+		"oneByOne":               oneByOne,       //default false
 		"signatureStyle":         signatureStyle, //default 1
 		"imageToStamp":           imageToStamp,
 		"stampTextSize":          stampTextSize,
