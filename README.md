@@ -1,16 +1,16 @@
 ![Go](https://img.shields.io/badge/Golang-1.19-blue.svg?logo=go&longCache=true&style=flat)
-# Firma Perú Invoker Integration - Segdi PCM
-Implementación del Motor de Firma Digital - Firma Perú Invoker Integration - de la [Segdi PCM](https://www.gob.pe/22273)
+# Firma Perú Invoker Integration - SGTD PCM
+Implementación del Motor de Firma Digital - Firma Perú Invoker Integration - de la [SGTD PCM](https://www.gob.pe/22273)
 
 ***Firma Perú Invoker*** es gratuito para las Entidades Públicas del Perú.
 
-Firma Perú Invoker se usa unicamente con certificado digital de persona juridica que se entregan a trabajadores del sector público, certificado digital de person natural con DNIe o certificado digital emitido por una entidad privada para personas.
+Firma Perú Invoker se usa unicamente con certificado digital de persona juridica que se entregan a trabajadores del sector público, certificado digital de persona natural con DNIe o certificado digital emitido por una entidad privada para personas.
 
 La versión [v1.5.1](https://github.com/jumanor/firmaperu-invoker/tree/v1.5.1) es el último lanzamiento
 
 Esta implementación es muy similar a **Refirma Invoker** por lo que los tutoriales de este puede servir aún de guía en **Firma Perú Invoker**
 
-Para mayor información de esta implementación puede ver los siguiente videos: [video 01](https://www.youtube.com/watch?v=bl4OZGWS0lk),[video 02](https://www.youtube.com/watch?v=aOto5CStZNA)
+Para mayor información de esta implementación puede ver los siguiente videos: [video 01](https://www.youtube.com/watch?v=bl4OZGWS0lk),[video 02](https://www.youtube.com/watch?v=aOto5CStZNA),[video 03](https://youtu.be/pLlIKqFY8eE)
 
 # Características 
 - Soporte para firmar varios documentos 
@@ -150,6 +150,13 @@ Firma Perú Invoker usa **Microsoft Click Once** para invocar a Firma Perú (Com
     3.1. En caso use **Visual Studio Code** instale el plugin [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) que habilita un Servidor Web Embebido (Recomendable).
 
 5. Ingresa a cualquier ejemplo que desee probar ejecutando **`http://direccion_ip:puerto/example01/test.html`**
+
+Nota
+
+Las siguientes instalaciones de Fima Perú (Componente Web) no son Oficiales de la [SGTD PCM](https://www.gob.pe/22273)
+
+- Si usa **Chome** o **Firefox** es posible ejecutar Firma Perú (Componente Web) sin instalar plugins(extensiones) adicionales para detalles de la instalación ver el siguiente [video](https://www.youtube.com/watch?v=3krIhVr6NCs).
+- Tambien es posible ejecutar Firma Perú (Componente Web) en cualquier derivado de **Ubuntu (Linux)** para detalles de la instalación ver el siguiente [video](https://www.youtube.com/watch?v=-YgnULCkjlk). 
 
 # Funcionamiento
 
