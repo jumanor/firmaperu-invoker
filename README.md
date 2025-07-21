@@ -189,6 +189,9 @@ let firma=new FirmaPeru("http://192.168.1.10:9091");
 //El Sistema de Gestion Documental se encarga de la autenticación y envía un token al Cliente
 //Este método se usa solo como demostración no se debe de usar en el Cliente
 let token=await firma.autenticacion("usuarioAccesoApi");
+//Ejemplo: getToken() llama a una api del servidor que devuelve un token válido
+//let token=await getToken();
+
 //Realiza el proceso de Firma Digital
 let url_base=await firma.ejecutar(pdfs,firmaParam,token);
 
