@@ -32,6 +32,13 @@ La solicitud la puede realizar en https://www.gob.pe/22273 y busca la opción: *
 Se le proporicionara un archivo **fwAuthorization.json** dentro del cual se encuentran las credenciales
 **[clientId]** y **[clientSecret]** para el uso de Firma Peru Invoker en el Sistema de Gestión Documental de su institución.   
 
+# Arquitectura
+Las credenciales *(fwAuthorization.json)* que proporciona **SGTD PCM** son para autorizar a **Firma Perú - Componente Web** ejecute el proceso de Firma Digital en la Computadora Personal del Usuario Final como se observa en el gráfico de abajo.
+1) El proceso de Firma Digital se realiza localmente en la Computadora del Usuario Final.
+2) **Firma Perú - Componente Web** comprime los pdfs firmados digitamente en un único archivo con extension 7z y enseguida lo envia a **Firma Perú Invoker**.
+3) **Firma Perú Invoker** descomprime el archivo 7z para que los pdfs puedan ser descargados individualmente.
+
+![a link](https://raw.githubusercontent.com/jumanor/firmaperu-invoker/master/public/arquitectura.jpeg)
 # Probando con Docker
 
 1) Levantamos un contenedor de refirma-invoker
