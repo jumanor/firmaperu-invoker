@@ -47,9 +47,60 @@ jobs:
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/firmaperu-invoker:${{ github.ref_name }}
+ 
+  build-rpm:
+    needs: build
+    runs-on: ubuntu-22.04
+    container:
+      image: rockylinux:8
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Linux binary
+        uses: actions/download-artifact@v4
+        with:
+          name: main
+          path: ./
+
+      - name: Install build dependencies
+        run: |
+          dnf install -y rpm-build rpmdevtools
+          
+      - name: Prepare RPM build environment
+        run: |
+          # Reemplazar la versión en el .spec con el tag actual (sin 'v' inicial si existe)
+          VERSION=$(echo "${{ github.ref_name }}" | sed 's/^v//') 
+          sed -i "s/%define version .*/%define version $VERSION/" ./packaging/rpm/firmaperu-invoker.spec
+          
+          mkdir -p ~/rpmbuild/{SOURCES,SPECS,BUILD,BUILDROOT,RPMS,SRPMS}
+          cp ./packaging/rpm/firmaperu-invoker.spec ~/rpmbuild/SPECS/
+          cp ./main ~/rpmbuild/SOURCES/
+          cp ./config.properties.example ~/rpmbuild/SOURCES/
+          cp -r ./public ~/rpmbuild/SOURCES/
+          cp ./packaging/rpm/firmaperu-invoker.service ~/rpmbuild/SOURCES/
+      - name: Build RPM package
+        run: |
+          rpmbuild -bb ~/rpmbuild/SPECS/firmaperu-invoker.spec
+
+      - name: Copy RPM to workspace
+        run: |
+          mkdir -p ./rpm-output
+          find ~/rpmbuild/RPMS/ -name "*.rpm" -exec cp {} ./rpm-output/ \;
+      
+      - name: Verify RPM package
+        run: |
+          cd ./rpm-output
+          rpm -qip *.rpm || echo "Error al verificar el RPM"
+        
+      - name: Upload RPM as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-package
+          path: ./rpm-output/*.rpm
 
   release:
-    needs: build
+    needs: [build,build-rpm]
     runs-on: ubuntu-22.04
     permissions:
       packages: write
@@ -66,34 +117,24 @@ jobs:
         with:
           name: main.exe
           path: ./
+      
+      - name: Download RPM package
+        uses: actions/download-artifact@v4
+        with:
+          name: rpm-package
+          path: ./rpm-output/
 
       - name: Create GitHub Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
-
-      - name: Upload Linux binary to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./main
-          asset_name: main
-          asset_content_type: application/octet-stream
-
-      - name: Upload Windows binary to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./main.exe
-          asset_name: main.exe
-          asset_content_type: application/octet-stream
+          files: |
+            ./main
+            ./main.exe
+            ./rpm-output/*.rpm
