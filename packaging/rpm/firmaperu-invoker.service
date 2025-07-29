@@ -1,0 +1,16 @@
+[Unit]
+Description=Firma Peru Invoker Integration
+After=network.target
+
+[Service]
+Type=simple
+User=firmaperu
+Group=firmaperu
+WorkingDirectory=/opt/firmaperu-invoker
+ExecStart=/opt/firmaperu-invoker/main
+Restart=on-failure
+; StandardOutput=append:/var/log/firmaperu-invoker/service.log
+; StandardError=append:/var/log/firmaperu-invoker/error.log
+
+[Install]
+WantedBy=multi-user.target
