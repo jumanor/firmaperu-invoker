@@ -50,7 +50,31 @@ docker run -d --name firmaperu-invoker -p 5050:5050 -p 9091:9091 -e CLIENT_ID=mi
 http://127.0.0.1:5050/example01/test.html
 ```
 
-# Instalación del Servidor
+# Instalación del Servidor (Recomendado)
+
+Por ahora el instalador esta disponible para clones de **redhat 8 (centos 8, alma linux 8, rocky linux 8,** etc).
+El archivo (rpm) instalara *firma peru invoker* como un servicio de sistema (daemon), iniciandose automáticamente al reiniciar el servidor.
+
+1. sudo dnf install epel-release -y     *(instalamos repositorio epel)*
+2. sudo dnf install p7zip -y            *(instalamos 7zip)*
+3. Descargamos el archivo de [aquí](https://github.com/jumanor/firmaperu-invoker/releases/latest/download/firmaperu-invoker-*.rpm)
+4. sudo rpm -ivh firmaperu-invoker-x.y.z.rpm  *(instalamos firma peru invoker)*
+
+Abrimos el puerto **9091** del firewall, normalmente viene pre instalado firewalld
+
+5. sudo firewall-cmd --zone=public --add-port=**9091**/tcp --permanent
+6. sudo firewall-cmd --reload
+
+Edite el archivo config.properties
+
+7. sudo vi /opt/firmaperu-invoker/config.properties *(actualize con las credenciales proporcionadas por SGTD-PCM)*
+
+Ahora iniciamos manualmente *firma peru invoker*, cuando reinicie la computadora el servicio se iniciara en forma automatica.
+
+8. sudo systemctl start firmaperu-invoker
+9. sudo systemctl status firmaperu-invoker (verificamos que el servicio se ejecuta satisfactoriamente)
+
+# Instalación del Servidor Manual
 
 Esta disponible un video de la instalación en el siguiente [enlace](https://www.youtube.com/watch?v=7q4dS8y3Sws)
 
