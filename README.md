@@ -51,6 +51,7 @@ http://127.0.0.1:5050/example01/test.html
 ```
 
 # Instalación del Servidor (Recomendado)
+Esta disponible un video de la instalación en el siguiente [enlace](https://www.youtube.com/watch?v=-1gYRs8S0bU)
 
 Por ahora el instalador esta disponible para clones de **redhat 8 (centos 8, alma linux 8, rocky linux 8,** etc).
 El archivo (rpm) instalara *firma peru invoker* como un servicio de sistema (daemon), iniciandose automáticamente al reiniciar el servidor.
@@ -74,7 +75,7 @@ Ahora iniciamos manualmente *firma peru invoker*, cuando reinicie la computadora
 8. sudo systemctl start firmaperu-invoker
 9. sudo systemctl status firmaperu-invoker (verificamos que el servicio se ejecuta satisfactoriamente)
 
-# Instalación del Servidor Manual
+# Instalación del Servidor (Manual)
 
 Esta disponible un video de la instalación en el siguiente [enlace](https://www.youtube.com/watch?v=7q4dS8y3Sws)
 
