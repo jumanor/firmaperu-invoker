@@ -169,26 +169,24 @@ Estan disponibles videos del funcionamiento (ejemplos) en los siguientes enlaces
 
 Firma Perú Invoker usa **Microsoft Click Once** para invocar a Firma Perú (Componente Web).
 
-1. Si esta usando navegador **Chome** o **Firefox** instala los siguientes plugins para habilitar **Microsoft Click Once**:
+1. En caso use el navegador **Edge** no es necesario instalar nada adicional (Recomendable).
 
-    - Chrome instale este [plugin](https://chromewebstore.google.com/detail/cegid-peoplenet-clickonce/jkncabbipkgbconhaajbapbhokpbgkdc) 
+2. Si esta usando navegador **Chome** o **Firefox** instala los siguientes plugins para habilitar **Microsoft Click Once**:
 
-    - Firefox instale este [plugin](https://addons.mozilla.org/es/firefox/addon/breez-clickonce)  
-    
-2. En caso use el navegador **Edge** no es necesario instalar nada adicional (Recomendable).
+    - Chrome instale este [plugin](https://chromewebstore.google.com/detail/logalty-clickonce/didfpaehajfbjnamladanbocmdhahfch) 
+
+    - Firefox (no hay plugin disponible, pero aún se pùede usar ver nota)  
 
 3. Copia la carpeta [example](https://github.com/jumanor/firmaperu-invoker/tree/master/example) de este repositorio en un Servidor Web (ver el siguiente [video](https://youtu.be/7q4dS8y3Sws?t=218) para mayor detalle)
 
     3.1. En caso use **Visual Studio Code** instale el plugin [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) que habilita un Servidor Web Embebido (Recomendable).
 
-5. Ingresa a cualquier ejemplo que desee probar ejecutando **`http://direccion_ip:puerto/example01/test.html`**
+4. Ingresa a cualquier ejemplo que desee probar ejecutando **`http://direccion_ip:puerto/example01/test.html`**
 
-Nota
-
-Las siguientes instalaciones de Fima Perú (Componente Web) no son Oficiales de la [SGTD PCM](https://www.gob.pe/22273)
-
+**Nota**
 - Si usa **Chome** o **Firefox** es posible ejecutar Firma Perú (Componente Web) sin instalar plugins(extensiones) adicionales para detalles de la instalación ver el siguiente [video](https://www.youtube.com/watch?v=3krIhVr6NCs).
 - Tambien es posible ejecutar Firma Perú (Componente Web) en cualquier derivado de **Ubuntu (Linux)** para detalles de la instalación ver el siguiente [video](https://www.youtube.com/watch?v=-YgnULCkjlk). 
+- Repositorio de instaladores https://github.com/jumanor/firmaperu-componenteweb 
 
 # Funcionamiento
 
