@@ -75,6 +75,23 @@ Ahora iniciamos manualmente *firma peru invoker*, cuando reinicie la computadora
 8. sudo systemctl start firmaperu-invoker
 9. sudo systemctl status firmaperu-invoker (verificamos que el servicio se ejecuta satisfactoriamente)
 
+Opcionalmente *Firma Perú Invoker* puede funcionar detras de **Nginx (Proxy Reverso)** entonce tiene que enviar las siguientes cabeceras
+
+``` bash
+server {
+    ...
+    ssl_certificate_key /home/jumanor/key.pem;  # certificado ssl/tls
+    ssl_certificate /home/jumanor/cert.pem;     # clave privada ssl/tls
+    ...
+    location / {
+        proxy_pass http://a.b.c.d:9091;         # dirección ip de firma peru invoker
+        proxy_set_header Host $host:$server_port;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    ...
+}
+``` 
+    
 # Instalación del Servidor (Manual)
 
 Esta disponible un video de la instalación en el siguiente [enlace](https://www.youtube.com/watch?v=7q4dS8y3Sws)
@@ -234,9 +251,7 @@ document.getElementById("frame2").src=url_base+"/"+encodeURI("doc2")+"/"+encodeU
 
 Esta implementación de *Firma Perú Invoker Integration* se puede usar en ***cualquier proyecto web*** (Php, Java, Python, etc) solo tiene que consumir las Api Rest implementadas, para controlar el acceso se usa JSON Web Tokens ([JWT](https://jwt.io/))
 
-El *Sistema de Gestión Documental* autentica a los Usuarios normalmente contra una Base de Datos,
-despues de la autencación satisfactoria se debe de consumir  el API REST **/autenticacion** de Firma Perú Invoker 
-y enviar el **token** al Cliente.
+Se recomienda obtener un token (por medio de **getToken()**) cada vez que se llame al método **ejecutar()** de la instancia de **FirmaPeru**.
 
 ![a link](https://raw.githubusercontent.com/jumanor/firmaperu-invoker/master/public/funcionamiento.jpeg)
 
