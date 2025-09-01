@@ -17,6 +17,7 @@ Para mayor información de esta implementación puede ver los siguiente videos: 
 - Api Rest, puede integrarse en cualquier proyecto web (Php, Python, Java, etc)
 - Json Web Tokens (JWT)
 - Soporte para protocolo https (SSL/TLS)
+- Soporte a DNIe 3.0
 
 # Documentos de la Implementación
 - Documento de Integración Firma Peru http://bit.ly/49Ardlv
@@ -27,10 +28,12 @@ Para mayor información de esta implementación puede ver los siguiente videos: 
 Para ejecutar *Firma Perú Invoker Integration* es necesario que el Responsable de la Oficina de Tecnologias solicite
 las credenciales de acceso a la *Secretaria de Gobierno y Transformación Digital* de la *PCM*
 
-La solicitud la puede realizar en https://www.gob.pe/22273 y busca la opción: *"Formato de solicitud de credenciales de Firma Perú - Firmador web"*
+La solicitud la puede realizar en https://www.gob.pe/22273 y busca la opción: *"Formato de solicitud de credenciales de Firma Perú - Firmador web"*. 
+
+Las credenciales proporcionadas se usan para **invocar** a *Firma Perú - Componente Web* (esta invocación la realiza en forma transparente *Firma Perú Invoker*)
 
 Se le proporicionara un archivo **fwAuthorization.json** dentro del cual se encuentran las credenciales
-**[clientId]** y **[clientSecret]** para el uso de Firma Peru Invoker en el Sistema de Gestión Documental de su institución.   
+**[clientId]** y **[clientSecret]** necesarias para el archivo de configuracion **config.properties** de *Firma Perú Invoker*. 
 
 # Arquitectura
 Las credenciales *(fwAuthorization.json)* que proporciona **SGTD PCM** son para autorizar a **Firma Perú - Componente Web** ejecute el proceso de Firma Digital en la Computadora Personal del Usuario Final como se observa en el gráfico de abajo.
@@ -200,11 +203,13 @@ Firma Perú Invoker usa **Microsoft Click Once** para invocar a Firma Perú (Com
 
 4. Ingresa a cualquier ejemplo que desee probar ejecutando **`http://direccion_ip:puerto/example01/test.html`**
 
-**Nota**
+**Nota 1**
 - Si usa **Chome** o **Firefox** es posible ejecutar Firma Perú (Componente Web) sin instalar plugins(extensiones) adicionales para detalles de la instalación ver el siguiente [video](https://www.youtube.com/watch?v=3krIhVr6NCs).
 - Tambien es posible ejecutar Firma Perú (Componente Web) en cualquier derivado de **Ubuntu (Linux)** para detalles de la instalación ver el siguiente [video](https://www.youtube.com/watch?v=-YgnULCkjlk). 
 - Repositorio de instaladores https://github.com/jumanor/firmaperu-componenteweb 
 
+**Nota 2**
+- Para usar DNIe 3.0 (por ahora) es necesario instalar drivers adicionales de [acá]( https://serviciosportal.reniec.gob.pe/portalciudadano), tambien puede revisar el [tutorial de intalación](https://identidad.reniec.gob.pe/documents/d/guest/guia_dnie_version3). 
 # Funcionamiento
 
 A continuación un manera simplicada del uso de Firma Perú Invoker Integration con **JavaScript** del lado del Cliente:
