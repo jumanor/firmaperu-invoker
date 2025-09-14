@@ -94,7 +94,15 @@ server {
     ...
 }
 ``` 
-    
+
+**Nota:**       
+- Para mayor control cuando se ejecuta *Firma Perú Invoker* se crea un archivo /opt/firmaperu-invoker/version.txt
+con la siguiente información:
+
+``` bash
+BuildTime: 2025-09-14T04:50:05Z                            #fecha de compilación
+GitCommit: master-25eebf5ea3343369b6bce1c3feabef41cf6f8cd7 #hash del commit que se uso para la compilación (extremadamente importante)
+```
 # Instalación del Servidor (Manual)
 
 Esta disponible un video de la instalación en el siguiente [enlace](https://www.youtube.com/watch?v=7q4dS8y3Sws)
