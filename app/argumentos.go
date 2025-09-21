@@ -36,6 +36,13 @@ func Argumentos(w http.ResponseWriter, r *http.Request) {
 	logging.Log().Debug().Str("url", serverURL).Msg("Ruta de construccion")
 
 	param_token := r.FormValue("param_token")
+
+	if err := util.VerificarJWT(param_token); err != nil {
+		logging.Log().Error().Err(err).Send()
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
 	// Obtenemos parametros url query
 	documentNameUUID := r.URL.Query().Get("documentNameUUID")
 	posx := r.URL.Query().Get("posx")
