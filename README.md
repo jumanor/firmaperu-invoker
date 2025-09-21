@@ -6,7 +6,7 @@ Implementación del Motor de Firma Digital - Firma Perú Invoker Integration - d
 
 Firma Perú Invoker se usa unicamente con certificado digital de persona juridica que se entregan a trabajadores del sector público, certificado digital de persona natural con DNIe o certificado digital emitido por una entidad privada para personas.
 
-La versión [v1.5.2](https://github.com/jumanor/firmaperu-invoker/tree/v1.5.2) es el último lanzamiento
+La versión [v1.5.3](https://github.com/jumanor/firmaperu-invoker/tree/v1.5.3) es el último lanzamiento
 
 Esta implementación es muy similar a **Refirma Invoker** por lo que los tutoriales de este puede servir aún de guía en **Firma Perú Invoker**
 
@@ -46,7 +46,7 @@ Las credenciales *(fwAuthorization.json)* que proporciona **SGTD PCM** son para 
 
 1) Levantamos un contenedor de refirma-invoker
 ```
-docker run -d --name firmaperu-invoker -p 5050:5050 -p 9091:9091 -e CLIENT_ID=mi_client_id -e CLIENT_SECRET=mi_cliente_secret jumanor/firmaperu-invoker:v1.5.2
+docker run -d --name firmaperu-invoker -p 5050:5050 -p 9091:9091 -e CLIENT_ID=mi_client_id -e CLIENT_SECRET=mi_cliente_secret jumanor/firmaperu-invoker:v1.5.3
 ```
 2) Probamos el **example01** (el proceso de firma de los clientes solo esta disponible para Sistema Operativo Windows)
 ```
@@ -61,7 +61,7 @@ El archivo (rpm) instalara *firma peru invoker* como un servicio de sistema (dae
 
 1. sudo dnf install epel-release -y     *(instalamos repositorio epel)*
 2. sudo dnf install p7zip -y            *(instalamos 7zip)*
-3. Descargamos el instalador(rpm) de [aquí](https://github.com/jumanor/firmaperu-invoker/releases/latest/download/firmaperu-invoker-1.5.2-1.el8.x86_64.rpm)
+3. Descargamos el instalador(rpm) de [aquí](https://github.com/jumanor/firmaperu-invoker/releases/latest/download/firmaperu-invoker-1.5.3-1.el8.x86_64.rpm)
 4. sudo rpm -ivh firmaperu-invoker-x.y.z.rpm  *(instalamos firma peru invoker)*
 
 Abrimos el puerto **9091** del firewall, normalmente viene pre instalado firewalld
