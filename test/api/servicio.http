@@ -1,0 +1,82 @@
+@baseUrl = http://127.0.0.1:9091
+@authToken = {{login.response.body.data}}
+### Inicio de sesión
+# @name login
+POST {{baseUrl}}/autenticacion
+Content-Type: application/json
+
+{
+  "UsuarioAccesoApi": "usuarioAccesoApi"
+}
+
+@argumentosBase64 = {{argumentos.response.body.data.argumentosBase64}}
+@urlBase= {{argumentos.response.body.data.urlBase}}
+@namePdf0="doc0"
+@namePdf1="doc1"
+
+### Obtener cadena de argumentos en base64
+# @name argumentos
+POST {{baseUrl}}/argumentsServletPCX
+Content-Type: application/json; charset=UTF-8
+x-access-token: {{authToken}}
+
+{
+  "pdfs": [
+    { "url": "http://127.0.0.1:5500/example01/01.pdf", "name": {{namePdf0}} },
+    { "url": "http://127.0.0.1:5500/example01/02.pdf", "name": {{namePdf1}} }
+  ],
+  "firma": {
+    "posx": 10,
+    "posy": 12
+  }
+}
+
+### @documentNameUUID se obtienen del JSON decodificado de @argumentosBase64
+### la decodificación se puede hacer en https://base64.guru/converter/decode
+### Ejemplo de decodificación:
+### {"document_extension":"pdf",
+###  "param_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJqdW1hbm9yIiwiZXhwIjoxNzU4MzQ2NzM2fQ.-LxCsHCFXKvDyvtAgDVdVqiGKQomwOGFFuUJWpgHECI",
+###  "param_url":"http://127.0.0.1:9091/argumentos?posx=10\u0026posy=12\u0026
+###   documentNameUUID=1f3b2559-20ce-477f-baf5-2679a540aee9\u0026
+###   reason=\u0026role=\u0026imageToStamp=\u0026visiblePosition=false\u0026oneByOne=false\u0026signatureStyle=-1\u0026stampPage=0\u0026stampTextSize=0\u0026stampWordWrap=0"}
+###
+@documentNameUUID=1f3b2559-20ce-477f-baf5-2679a540aee9
+
+### Obtener cadena de argumentos en base64
+### Este método es solo usado por firma peru (componente web)
+POST {{baseUrl}}/argumentos?documentNameUUID={{documentNameUUID}}&posx=10&posy=12&reason=&role=&imageToStamp=&stampPage=0&visiblePosition=false&oneByOne=false&signatureStyle=1&stampTextSize=0&stampWordWrap=0
+Content-Type: application/x-www-form-urlencoded
+
+param_token={{authToken}}
+
+### Descargar archivo 7z con documentos sin firmar
+### Este método es solo usado por firma peru (componente web)
+GET {{baseUrl}}/download7z?documentName={{documentNameUUID}}&token={{authToken}}
+# @name downloadFile
+Accept: application/octet-stream
+
+### Subir archivo 7z con documentos firmados
+### Este método es solo usado por firma peru (componente web)
+POST {{baseUrl}}/upload7z/{{documentNameUUID}}?token={{authToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="archivo7z"; filename="firmados.7z"
+Content-Type: application/x-7z-compressed
+
+< ./firmados.7z
+------WebKitFormBoundary7MA4YWxkTrZu0gW-- 
+
+### Descargar PDF firmado mediante GET
+GET {{urlBase}}/{{namePdf0}}/{{authToken}}
+# @name downloadPdfSigned
+Accept: application/pdf
+
+
+### Descargar PDF firmado mediante POST
+POST {{urlBase}}/{{namePdf0}}
+# @name downloadPdfSigned
+Accept: application/pdf
+x-access-token: {{authToken}}
+
+

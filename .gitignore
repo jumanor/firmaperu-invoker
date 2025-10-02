@@ -7,3 +7,4 @@ main.log
 token.txt
 version.txt
 logs/*
+rpm/*
